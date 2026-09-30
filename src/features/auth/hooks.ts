@@ -10,13 +10,19 @@ export const useAuth = () => {
   const login = async (credentials: LoginCredentials) => {
     setLoading(true);
     setError(null);
+
     try {
       const data = await loginRequest(credentials);
+
       setUser(data.user);
+
       return data;
     } catch (err: any) {
-      setError(err.response?.data?.message || "Error al iniciar sesión");
-      throw err;
+      const message = err?.message || "Error al iniciar sesión";
+
+      setError(message);
+
+      throw new Error(message);
     } finally {
       setLoading(false);
     }
